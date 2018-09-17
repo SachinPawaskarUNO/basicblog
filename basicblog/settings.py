@@ -39,15 +39,18 @@ DATABASES = {
 #        'USER': 'hguadziuufmcxp',
 #        'PASSWORD': 'ed0fdf25323af42fefeddecc291aaa7d50b3ea2406391a287d55e22f21f59365',
 #        'HOST': 'ec2-54-83-27-165.compute-1.amazonaws.com',
-        'PORT': '5432',
+#        'PORT': '5432',
     }
 }
 
 try:
-    from .local_settings import *
+    from local_settings import *
 except ImportError:
+    # Update database configuration with $DATABASE_URL.
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+    DATABASES['default'] = dj_database_url.config()
     pass
-
 
 # Application definition
 
@@ -144,8 +147,3 @@ STATICFILES_DIRS = (
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-# Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-DATABASES['default'] = dj_database_url.config()
