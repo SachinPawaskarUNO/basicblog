@@ -1,0 +1,1 @@
+# Include all your static files in this directory
